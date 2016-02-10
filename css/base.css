@@ -1,0 +1,91 @@
+body, div {
+	margin: 0px;
+	padding: 0px;
+	font: 15px Sans-serif;
+	color: #555555;
+	background-color: #eeeeee;
+}
+
+div.taskbar {
+	position: fixed;
+	left: -65px;
+	top: 0px;
+	/* opacity: 0.5; */
+	height: 100%;
+	width: 70px;
+	background-color: #55aafe;
+	color: #ffffff;
+	transition: left 0.5s;
+}
+div.taskbar:hover {
+	left: 0px;
+	transition: left 0.5s;
+}
+div.command {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	width: 50px;
+	height: 50px;
+	background-color: #0055a9;
+	transition: width 0.5s;
+}
+div.command:hover, div.command:active {
+	width: 500px;
+	transition: width 1s;
+	box-shadow: 0px 0px 10px 10px grey;
+}
+div.tasks {
+	position: absolute;
+	left: 0px;
+	top: 70px;
+	width: 70px;
+	height: 100%;
+	background-color: #4499ed;
+}
+div.notification {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	width: 70px;
+	height: 100px;
+	background-color: #9944ed;
+}
+
+div.post {
+	float: left;
+	left: 0px;
+	top: 0px;
+	width: auto;
+	height: auto;
+	margin: 10px;
+	padding: 0px;
+	border: 3px solid #ffffff;
+	cursor: default;
+}
+.selected {
+	box-shadow: 0px 0px 5px 5px grey;
+}
+div.post > div.title {
+	padding: 10px;
+	text-align: center;
+	background-color: #5555fe;
+	color: #fe5555;
+	font-weight: bold;
+	cursor: pointer;
+}
+div.post > div.content {
+	padding: 10px;
+	text-align: left;
+	background-color: #777777;
+	color: #eeeeee;
+}
+div.post > div.option {
+	padding: 10px;
+	background-color: #aaaaaa;
+}
+
+div.inserter {
+	position: fixed;
+	display: none;
+}
