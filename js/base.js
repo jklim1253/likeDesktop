@@ -73,10 +73,11 @@
 			posts[index].style.zIndex = max_zIndex;
 			updatePosition(posts[index], x, y);
 			x += posts[index].offsetWidth + margin;
-			y += posts[index].offsetHeight + margin;
+			//y += posts[index].offsetHeight + margin;
 		}
 
 		game("test").run();
 		game("test2").run();
+		pingpong("pingpong").run();
 	}
 })();

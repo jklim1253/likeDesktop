@@ -1,14 +1,7 @@
-function getCanvas(windowid) {
-	var canvas = document.getElementById(windowid);
-	if (canvas === undefined) {
-		alert("fail to find window to connect");
-	}
-	return canvas;
-}
 var game = function(windowid){
 	var bgcolor = "#ffffff";
 	var canvas = getCanvas(windowid);
-	if (canvas === undefined) return {}; // return null object
+	if (canvas === undefined) return {}; // return null object.
 	var width = canvas.width;
 	var height = canvas.height;
 	var context = canvas.getContext("2d");
