@@ -75,5 +75,8 @@
 			x += posts[index].offsetWidth + margin;
 			y += posts[index].offsetHeight + margin;
 		}
+
+		game("test").run();
+		game("test2").run();
 	}
 })();

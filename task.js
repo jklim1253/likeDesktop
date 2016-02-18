@@ -1,17 +1,20 @@
-var global = function() {
-	var _global_id = 0;
-	function _get_handle_id() {
-		return _global_id++;
-	}
-	return {
-		make_handle_id : _get_handle_id,
+var _OS_ = function() {
+	var global = function() {
+		var _global_id = 0;
+		function _get_handle_id() {
+			return _global_id++;
+		}
+		return {
+			make_handle_id : _get_handle_id,
+		};
 	};
-};
-var error = function() {
-	return {
-		success: 0,
-		unknown_error: 1,
+	var error = function() {
+		return {
+			success: 0,
+			unknown_error: 1,
+		};
 	};
+
 };
 var TaskType = function() {
 	var _background_task_type = 0;
