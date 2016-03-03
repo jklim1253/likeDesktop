@@ -27,7 +27,7 @@
 	}
 	var pingpong = (function(windowid) {
 		// base variable for canvas.
-		var msg = messagequeue.popByReceiver("pingpong.js");
+		var msg = messagequeue.pickByReceiver("pingpong.js");
 		console.log(msg.value);
 		var canvas = PostManager.getCanvas(msg.value.parentNode);
 		if (canvas === undefined) return {}; // return null object.

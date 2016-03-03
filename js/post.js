@@ -21,11 +21,11 @@ var message = function(sender, receiver, value) {
 var messagequeue = (function() {
 	var _depot = [];
 
-	function _push(msg) {
+	function _post(msg) {
 		console.log("push: " + msg.toString());
 		_depot.push(msg);
 	}
-	function _pop() {
+	function _pick() {
 		if (_is_empty()) return null;
 
 		var msg = _depot[0];
@@ -33,7 +33,7 @@ var messagequeue = (function() {
 
 		return msg;
 	}
-	function _pop_msg_by_receiver(rcv) {
+	function _pick_msg_by_receiver(rcv) {
 		var len = _depot.length;
 		var msg = null;
 		var index = 0;
@@ -53,9 +53,9 @@ var messagequeue = (function() {
 		return (_depot.length === 0);
 	}
 	return {
-		push: _push,
-		pop: _pop,
-		popByReceiver: _pop_msg_by_receiver,
+		post: _post,
+		pick: _pick,
+		pickByReceiver: _pick_msg_by_receiver,
 		is_empty: _is_empty,
 	};
 })();
@@ -126,6 +126,64 @@ var os = (function () {
 			_workspace.appendChild(_desktop);
 		}
 	}
+	var selected; // undefined.
+	var dx = 0, dy = 0;
+	var max_zIndex = 0;
+	function _updatePosition(el, x, y) {
+		el.style.left = x + "px";
+		el.style.top = y + "px";
+
+		var children = el.childNodes;
+		var index = children.length;
+		while (index--) {
+			var child = children[index];
+			if (child.className === "option") {
+				var option = "left: " + util.pad(el.style.left, 5, '0') + 
+							",top: " + util.pad(el.style.top, 5, '0') + "<br>" +
+							"offsetLeft: " + util.pad(el.offsetLeft, 5, '0') +
+							",offsetTop: " + util.pad(el.offsetTop, 5, '0');
+				child.innerHTML = option;
+				break;
+			}
+		}
+	}
+	function _onMouseDown(e) {
+		e.preventDefault();
+		var el = e.target;
+		var pa = el.parentNode;
+		if (el.className === "title" &&
+			pa !== undefined &&
+			pa.className === "post") {
+			selected = pa;
+
+			selected.className += " selected";
+			selected.style.position = "absolute";
+			selected.style.zIndex = ++max_zIndex;
+			dx = e.pageX - (selected.offsetLeft - parseInt(getComputedStyle(selected, null).marginLeft));
+			dy = e.pageY - (selected.offsetTop - parseInt(getComputedStyle(selected, null).marginTop));
+
+			_updatePosition(selected,
+						e.pageX - dx,
+						e.pageY - dy);
+		}
+	}
+	function _onMouseUp(e) {
+		e.preventDefault();
+		if (selected !== undefined) {
+			selected.className = "post";
+			//selected.style.zIndex -= 1;
+			selected = undefined;
+		}
+	}
+	function _onMouseMove(e) {
+		e.preventDefault();
+		if (selected !== undefined) {
+			_updatePosition(selected,
+						e.pageX - dx,
+						e.pageY - dy);
+		}
+	}
+
 	function _boot() {
 		body = document.body;
 
@@ -137,6 +195,10 @@ var os = (function () {
 
 		// make desktop
 		_make_desktop();
+
+		document.addEventListener("mousedown", _onMouseDown);
+		document.addEventListener("mouseup", _onMouseUp);
+		document.addEventListener("mousemove", _onMouseMove);
 	}
 	function _get_workspace() {
 		return _workspace;
@@ -158,6 +220,7 @@ var os = (function () {
 		getTaskbar: _get_taskbar,
 		getDesktop: _get_desktop,
 		generateId: _generateId,
+		updatePosition: _updatePosition,
 	};
 })();
 
@@ -177,13 +240,14 @@ var PostManager = (function() {
 		var script = document.createElement("script");
 		script.src = path + file;
 
-		messagequeue.push(new message("PostManager", file, {
+		messagequeue.post(new message("PostManager", file, {
 			"parentNode": parentNode,
 			"file": file
 		}));
 
 		parentNode.appendChild(script);
 	}
+	var x = 0, y = 0, margin = 10;
 	function _add(post) {
 		var desktop = os.getDesktop();
 		post.id = os.generateId();
@@ -191,6 +255,9 @@ var PostManager = (function() {
 		var item = document.createElement("div");
 		item.className = "post";
 		item.id = post.id;
+		item.style.position = "absolute";
+		item.style.zIndex = 0;
+		
 		desktop.appendChild(item);
 
 		var title = document.createElement("div");
@@ -206,6 +273,9 @@ var PostManager = (function() {
 		var option = document.createElement("div");
 		option.className = "option";
 		item.appendChild(option);
+
+		os.updatePosition(item, x, y);
+		x += item.offsetWidth + margin;
 
 		postlist.push(post);
 	}
