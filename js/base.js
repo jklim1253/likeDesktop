@@ -76,8 +76,8 @@
 			//y += posts[index].offsetHeight + margin;
 		}
 
-		game("test").run();
-		game("test2").run();
-		pingpong("pingpong").run();
+//		game("test").run();
+//		game("test2").run();
+//		pingpong("pingpong").run();
 	}
 })();

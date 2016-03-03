@@ -4,13 +4,24 @@
 	<meta charset="UTF-8">
 	<title>like Desktop</title>
 	<link rel="stylesheet" href="css/base.css">
+	<script src="js/post.js"></script>
+	<script src="js/util.js"></script>
+	<script src="js/base.js"></script>
+	<script>
+	window.addEventListener("load", function(){
+				os.boot();
+				PostManager.createPost(new Post("hello", "pingpong.js", "all"));
+				PostManager.createPost(new Post("world", "pingpong.js", "all"));
+			});
+	</script>
+<!--
 	<script src="js/base.canvas.js"></script>
 	<script src="js/canvastest.js"></script>
 	<script src="js/pingpong.js"></script>
-	<script src="js/util.js"></script>
-	<script src="js/base.js"></script>
+-->
 </head>
 <body>
+<!--
 <div class="workspace">
 	<div class="taskbar">
 		<div class="command"></div>
@@ -45,6 +56,6 @@
 	<div class="title"></div>
 	<div class="content"></div>
 </div>
-	
+-->	
 </body>
 </html>
