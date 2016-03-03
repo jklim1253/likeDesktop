@@ -4,9 +4,8 @@
 	<meta charset="UTF-8">
 	<title>like Desktop</title>
 	<link rel="stylesheet" href="css/base.css">
-	<script src="js/post.js"></script>
 	<script src="js/util.js"></script>
-	<script src="js/base.js"></script>
+	<script src="js/post.js"></script>
 </head>
 <body>
 <script>
@@ -14,6 +13,7 @@ window.addEventListener("load", function(){
 		os.boot();
 		PostManager.add(new Post("hello", "pingpong.js", "all"));
 		PostManager.add(new Post("world", "pingpong.js", "all"));
+		PostManager.add(new Post("rotate", "canvastest.js", "all"));
 	});
 </script>
 </body>
