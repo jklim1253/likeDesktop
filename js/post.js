@@ -10,6 +10,51 @@
 // 				- contents
 // 				- option
 
+var message = function(sender, receiver, value) {
+	this.sender = sender;
+	this.receiver = receiver;
+	this.value = value;
+};
+var messagequeue = (function() {
+	var _depot = [];
+
+	function _push(msg) {
+		_depot.push(msg);
+	}
+	function _pop() {
+		if (_is_empty()) return null;
+
+		var msg = _depot[0];
+		_depot.splice(0,1);
+
+		return msg;
+	}
+	function _pop_msg_by_receiver(rcv) {
+		var len = _depot.length;
+		var msg = null;
+		var index = 0;
+
+		while (index < len) {
+			if (_depot[index].receiver === rcv) {
+				msg = _depot[index];
+				_depot.splice(index,index+1);
+				break;
+			}
+			index++;
+		}
+
+		return msg;
+	}
+	function _is_empty() {
+		return (_depot.length === 0);
+	}
+	return {
+		push: _push,
+		pop: _pop,
+		popByReceiver: _pop_msg_by_receiver,
+		is_empty: _is_empty,
+	};
+})();
 var os = (function () {
 	var body = null;
 
@@ -121,12 +166,15 @@ var Post = function(title,contents,option) {
 var PostManager = (function() {
 	var path = "js/";
 	var postlist = [];
+
+	// file is unique.
+	// if file is same, created contents should be same.
 	function _create_content(parentNode, file) {
 		var script = document.createElement("script");
 		script.src = path + file;
 		parentNode.appendChild(script);
 	}
-	function _createPost(post) {
+	function _add(post) {
 		var desktop = os.getDesktop();
 		post.id = os.generateId();
 
@@ -151,7 +199,7 @@ var PostManager = (function() {
 
 		postlist.push(post);
 	}
-	function _removePost(postid) {
+	function _remove(postid) {
 		var desktop = os.getDesktop();
 
 		desktop.removeChild("postid" + postid);
@@ -164,7 +212,7 @@ var PostManager = (function() {
 			}
 		}
 	}
-	function _getPostlist() {
+	function _getlist() {
 		return postlist;
 	}
 	function _createCanvas(parentNode, id, width, height) {
@@ -192,9 +240,9 @@ var PostManager = (function() {
 		return canvas;
 	}
 	return {
-		createPost: _createPost,
-		removePost: _removePost,
-		getPostlist: _getPostlist,
+		add: _add,
+		remove: _remove,
+		getlist: _getlist,
 		getCanvas: _getCanvas,
 	};
 })();

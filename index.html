@@ -10,8 +10,8 @@
 	<script>
 	window.addEventListener("load", function(){
 				os.boot();
-				PostManager.createPost(new Post("hello", "pingpong.js", "all"));
-				PostManager.createPost(new Post("world", "pingpong.js", "all"));
+				PostManager.add(new Post("hello", "pingpong.js", "all"));
+				PostManager.add(new Post("world", "pingpong.js", "all"));
 			});
 	</script>
 <!--
