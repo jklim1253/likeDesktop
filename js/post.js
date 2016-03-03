@@ -14,11 +14,15 @@ var message = function(sender, receiver, value) {
 	this.sender = sender;
 	this.receiver = receiver;
 	this.value = value;
+	this.toString = function() {
+		return "message Object {sender:"+sender+",receiver:"+receiver+",value:"+value.toString()+"}";
+	};
 };
 var messagequeue = (function() {
 	var _depot = [];
 
 	function _push(msg) {
+		console.log("push: " + msg.toString());
 		_depot.push(msg);
 	}
 	function _pop() {
@@ -172,6 +176,12 @@ var PostManager = (function() {
 	function _create_content(parentNode, file) {
 		var script = document.createElement("script");
 		script.src = path + file;
+
+		messagequeue.push(new message("PostManager", file, {
+			"parentNode": parentNode,
+			"file": file
+		}));
+
 		parentNode.appendChild(script);
 	}
 	function _add(post) {
@@ -216,20 +226,22 @@ var PostManager = (function() {
 		return postlist;
 	}
 	function _createCanvas(parentNode, id, width, height) {
+		console.log("_createCanvas("+parentNode+","+id+","+width+","+height+")");
 		var canvas = document.createElement("canvas");
 		canvas.id = id;
 		if (width !== undefined && height !== undefined) {
-			canvas.style.width = width;
-			canvas.style.height = height;
+			canvas.width = width;
+			canvas.height = height;
 		}
 		parentNode.appendChild(canvas);
 		return canvas;
 	}
 	function _getCanvas(parentNode) {
+		console.log("_getCanvas("+parentNode+")");
 		if (parentNode === undefined) return null;
 
-		var defaultWidth = 200;
-		var defaultHeight = 200;
+		var defaultWidth = 400;
+		var defaultHeight = 400;
 		var canvas = parentNode.getElementsByTagName("canvas");
 		if (canvas.length === 0) {
 			canvas = _createCanvas(parentNode, os.generateId(), defaultWidth, defaultHeight);
