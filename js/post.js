@@ -65,6 +65,9 @@ var os = (function () {
 	var _workspace = null;
 	var _taskbar = null;
 	var _desktop = null;
+	var _commandbar = null;
+	var _taskarea = null;
+	var _notification = null;
 
 	function _make_workspace() {
 		_workspace = document.getElementById("workspace");
@@ -76,30 +79,30 @@ var os = (function () {
 		}
 	}
 	function _make_command_bar() {
-		var commandbar = document.getElementById("commandbar");
-		if (commandbar === null) {
-			commandbar = document.createElement("div");
-			commandbar.className = "command";
-			commandbar.id = "commandbar";
-			_taskbar.appendChild(commandbar);
+		_commandbar = document.getElementById("commandbar");
+		if (_commandbar === null) {
+			_commandbar = document.createElement("div");
+			_commandbar.className = "command";
+			_commandbar.id = "commandbar";
+			_taskbar.appendChild(_commandbar);
 		}
 	}
 	function _make_task_area() {
-		var taskarea = document.getElementById("taskarea");
-		if (taskarea === null) {
-			taskarea = document.createElement("div");
-			taskarea.className = "tasks";
-			taskarea.id = "taskarea";
-			_taskbar.appendChild(taskarea);
+		_taskarea = document.getElementById("taskarea");
+		if (_taskarea === null) {
+			_taskarea = document.createElement("div");
+			_taskarea.className = "tasks";
+			_taskarea.id = "taskarea";
+			_taskbar.appendChild(_taskarea);
 		}
 	}
 	function _make_notification_area() {
-		var notification = document.getElementById("notificationarea");
-		if (notification === null) {
-			notification = document.createElement("div");
-			notification.className = "notification";
-			notification.id = "notificationarea";
-			_taskbar.appendChild(notification);
+		_notification = document.getElementById("notificationarea");
+		if (_notification === null) {
+			_notification = document.createElement("div");
+			_notification.className = "notification";
+			_notification.id = "notificationarea";
+			_taskbar.appendChild(_notification);
 		}
 	}
 	function _make_taskbar() {
@@ -213,6 +216,29 @@ var os = (function () {
 	function _generateId() {
 		return "id_" + (_global_id++);
 	}
+	function _clear_taskarea() {
+		var children = _taskarea.childNodes;
+		var len = children.length;
+		while (len--) {
+			_taskarea.removeChild(children[len]);
+		}
+	}
+	function _add_taskarea(post_array) {
+		var len = post_array.length;
+		var index = 0;
+		while (index < len) {
+			var item = document.createElement("div");
+			item.className = "taskarea_item";
+			item.innerHTML = post_array[index].title;
+			_taskarea.appendChild(item);
+			index++;
+		}
+	}
+	function _update_taskbar() {
+		var posts = PostManager.getlist();
+		_clear_taskarea();
+		_add_taskarea(posts);
+	}
 
 	return {
 		boot: _boot,
@@ -221,6 +247,7 @@ var os = (function () {
 		getDesktop: _get_desktop,
 		generateId: _generateId,
 		updatePosition: _updatePosition,
+		updateTaskbar: _update_taskbar,
 	};
 })();
 
@@ -278,6 +305,8 @@ var PostManager = (function() {
 		x += item.offsetWidth + margin;
 
 		postlist.push(post);
+
+		os.updateTaskbar();
 	}
 	function _remove(postid) {
 		var desktop = os.getDesktop();

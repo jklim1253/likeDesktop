@@ -35,6 +35,18 @@ div.command:hover, div.command:active {
 	transition: width 1s;
 	box-shadow: 0px 0px 10px 10px grey;
 }
+div.taskarea_item {
+	margin: 0px;
+	padding: 5px;
+	background-color: #54A9FD;
+	color: #ffffff;
+	border: 1px solid #3489dd;
+	cursor: pointer;
+}
+div.taskarea_item:hover, div.taskarea_item:active {
+	background-color: #3489dd;
+	transition: background-color 1s;
+}
 div.tasks {
 	position: absolute;
 	left: 0px;
