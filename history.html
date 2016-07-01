@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>history - undo and redo</title>
+	<link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+<canvas id="board"></canvas>
+<script>
+var Action = function() {
+	return {
+		execute: _execute,
+		what: _what
+	};
+};
+var Command = function() {
+	return {
+		list: _list,
+		push: _push,
+		undo: _undo,
+		redo: _redo
+	};
+};
+</script>
+</body>
+</html>
