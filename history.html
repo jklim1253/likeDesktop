@@ -6,9 +6,8 @@
 	<link rel="stylesheet" href="css/base.css">
 </head>
 <body>
-<canvas id="board"></canvas>
 <script>
-var Action = function() {
+var Action = function(who, whom, what, when, why) {
 	return {
 		execute: _execute,
 		what: _what
@@ -22,6 +21,45 @@ var Command = function() {
 		redo: _redo
 	};
 };
+
+var __last_error = undefined;
+function error_log() {
+	if (!__last_error) {
+		log(__last_error);
+	}
+};
+
+var MainApp = function() {
+	var width = 800;
+	var height = 600;
+	var background = "#999";
+	var canvas = undefined;
+
+	if (!initialize_canvas(width, height, background)) {
+		error_log();
+		return;
+	}
+
+	function initialize_canvas(width, height, bgcolor) {
+		canvas = document.getElementById("board");
+		if (canvas === null) {
+			canvas = document.createElement("canvas");
+			if (canvas === null) {
+				__last_error = "canvas element cannot found.";
+				return false;
+			}
+			document.body.appendChild(canvas);
+			canvas.id = "board";
+		}
+		canvas.width = width;
+		canvas.height = height;
+		canvas.style.background = bgcolor;
+
+		return true;
+	};
+};
+
+window.addEventListener("load", MainApp, false);
 </script>
 </body>
 </html>
