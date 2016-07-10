@@ -25,7 +25,7 @@ var Command = function() {
 var __last_error = undefined;
 function error_log() {
 	if (!__last_error) {
-		log(__last_error);
+		console.log(__last_error);
 	}
 };
 
@@ -34,12 +34,17 @@ var MainApp = function() {
 	var height = 600;
 	var background = "#999";
 	var canvas = undefined;
+	var context = undefined;
 
 	if (!initialize_canvas(width, height, background)) {
 		error_log();
 		return;
 	}
 
+	//////////////////////////////////////////////////	
+	// initialize_canvas
+	// : initalize canvas element and style.
+	//////////////////////////////////////////////////	
 	function initialize_canvas(width, height, bgcolor) {
 		canvas = document.getElementById("board");
 		if (canvas === null) {
@@ -51,12 +56,137 @@ var MainApp = function() {
 			document.body.appendChild(canvas);
 			canvas.id = "board";
 		}
+		context = canvas.getContext("2d");
+		console.log(context);
+
 		canvas.width = width;
 		canvas.height = height;
 		canvas.style.background = bgcolor;
 
 		return true;
 	};
+
+	//////////////////////////////////////////////////	
+	// Block class
+	// : movable object declaration.
+	//////////////////////////////////////////////////	
+	var Block = function(color, size) {
+		this.constructor;
+		this.color = color;
+		this.x = 0;
+		this.y = 0;
+		this.size = size;
+	};
+	//////////////////////////////////////////////////	
+	// Block move method
+	// : move block 4-direction(up, down, left, right)
+	//////////////////////////////////////////////////	
+	Block.prototype.move = function(direction) {
+		switch (direction) {
+			case "up" :
+				if (this.y > 0) {
+					this.y -= this.size;
+				}
+				break;
+			case "down" :
+				if (this.y + this.size < height) {
+					this.y += this.size;
+				}
+				break;
+			case "left" :
+				if (this.x > 0) {
+					this.x -= this.size;
+				}
+				break;
+			case "right" :
+				if (this.x + this.size < width) {
+					this.x += this.size;
+				}
+				break;
+			default :
+				__last_error = "unknown block move command(" + direction + ")";
+				return false;
+				break;
+		}
+		return true;
+	};
+	//////////////////////////////////////////////////	
+	// Block draw method
+	// : draw block using argument canvas context.
+	//////////////////////////////////////////////////	
+	Block.prototype.draw = function(context) {
+		if (!context) {
+			__last_error = "context is null";
+			return false;
+		}
+		console.log("coord("+this.x+","+this.y+","+(this.x+this.size)+","+(this.y+this.size)+")");
+		context.save();
+		context.beginPath();
+		context.rect(this.x, this.y, this.size, this.size);
+		context.closePath();
+		context.fillStyle = this.color;
+		context.fill();
+		context.restore();
+
+		return true;
+	};
+
+	var blocks = [];
+	blocks.push(new Block("#994444", 50));
+
+	function update() {
+		context.save();
+		context.beginPath();
+		context.rect(0,0,width,height);
+		context.closePath();
+		context.fillStyle = background;
+		context.fill();
+		context.restore();
+
+		var len = blocks.length;
+		for (var i = 0; i < len; i++) {
+			if (!blocks[i].draw(context)) {
+				error_log();
+				break;
+			}
+		}
+	};
+	update();
+
+	var __keys = {};
+	function KeyBinding(e) {
+		if (e.type === "keydown") {
+			__keys[e.key] = true;
+		}
+		if (e.type === "keyup") {
+			if (__keys[e.key]) {
+				// click event occur.
+				console.log("click event occur("+e.key+")");
+				__keys[e.key] = false;
+				switch (e.key) {
+					case 'w' :
+						blocks[0].move("up");
+						break;
+					case 'a' :
+						blocks[0].move("left");
+						break;
+					case 's' :
+						blocks[0].move("down");
+						break;
+					case 'd' :
+						blocks[0].move("right");
+						break;
+					default :
+						break;
+				}
+
+				update();
+			}
+		}
+	};
+
+	document.addEventListener("keydown", KeyBinding, false);
+	document.addEventListener("keyup", KeyBinding, false);
 };
 
 window.addEventListener("load", MainApp, false);
