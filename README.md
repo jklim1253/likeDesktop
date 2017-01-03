@@ -9,9 +9,18 @@ For Something Funny.
 
 ## For Who
 Absolutely Me, or like as me
+<<<<<<< .mine
 
 - [locale problem][1]
 
 
 
 [1]:blob/master/md/cpp_question/fstream_open_failed_when_path_have_some_characters_which_are_not_alphabet.md
+=======
+
+- [locale problem][1]
+
+
+
+[1]:md\cpp_question\fstream_open_failed_when_path_have_some_characters_which_are_not_alphabet.md
+>>>>>>> .theirs
