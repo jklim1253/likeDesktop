@@ -1,0 +1,29 @@
+{
+  "name": "likedesktop",
+  "version": "1.0.0",
+  "description": "app as like Desktop",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jklim1253/likeDesktop.git"
+  },
+  "keywords": [
+    "likedesktop"
+  ],
+  "author": "jklim1253@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jklim1253/likeDesktop/issues"
+  },
+  "homepage": "https://github.com/jklim1253/likeDesktop#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.34.0"
+  }
+}
